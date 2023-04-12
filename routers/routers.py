@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 import services.services as services
 
+
 app = FastAPI()
 
 
@@ -15,4 +16,19 @@ async def get_carrinho(user: int):
     if item:
         return item
     
-    raise HTTPException(status_code=404, detail="Usuário não tem carrinho ativo")
+    raise HTTPException(status_code=404, detail="User does not have an active cart")
+
+
+@app.put("/carrinho/{user}/produto/{prod}")
+async def put_qtd_carrinho(user: int, prod: int, carrinho: services.Carrinho):
+    if user != carrinho.usuario:
+        raise HTTPException(status_code=404, detail="User from path is not equals to body User")
+    
+    if prod != carrinho.produto:
+        raise HTTPException(status_code=404, detail="Product from path is not equals to body Product")
+    
+    item = services.update_qtd_carrinho(user, prod, carrinho.dict())
+    if item:
+        return item
+    
+    raise HTTPException(status_code=404, detail="Product not found in the chart")
