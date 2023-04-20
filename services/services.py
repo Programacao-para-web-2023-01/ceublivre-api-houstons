@@ -1,14 +1,27 @@
-from core.schemas.carrinho import *
+from core.schemas.chart import *
 from core.database.database import db
 
-def get_carrinho_usuario(user):
-    items = db.fetch({"usuario": user}).items
+def get_chart(key):
+    chart = db.get(key)
+    return chart
+
+def get_user_chart(user):
+    items = db.fetch({"user": user}).items
     return items
 
 
-def update_qtd_carrinho(user, prod, carrinho):
-    item = db.fetch({"usuario": user, "produto": prod}).items
-    if item:
-        key = item[0]["key"]
-        db.update(carrinho, key)
-        return carrinho
+def update_chart_quantity(key, chart):
+    try:
+        db.update(chart, key)
+        return chart
+    except:
+        return None
+    
+
+def delete_chart(key):
+    chart = get_chart(key=key)
+    if chart:
+        db.delete(key)
+        return True
+    
+    return False

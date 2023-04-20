@@ -9,26 +9,37 @@ app = FastAPI()
 async def root():
     return {"message": "api em construção"}
 
+@app.get("/chart/{key}")
+async def root(key: str):
+    chart = services.get_chart(key)
+    if chart:
+        return chart
+    
+    raise HTTPException(status_code=404, detail="Chart not found")
 
-@app.get("/carrinho/user/{user}")
-async def get_carrinho(user: int):
-    item = services.get_carrinho_usuario(user)
+
+@app.get("/chart/user/{user}")
+async def get_chart(user: int):
+    item = services.get_user_chart(user)
     if item:
         return item
     
     raise HTTPException(status_code=404, detail="User does not have an active cart")
 
 
-@app.put("/carrinho/user/{user}/product/{prod}")
-async def put_qtd_carrinho(user: int, prod: int, carrinho: services.Carrinho):
-    if user != carrinho.usuario:
-        raise HTTPException(status_code=404, detail="User from path is not equals to body User")
-    
-    if prod != carrinho.produto:
-        raise HTTPException(status_code=404, detail="Product from path is not equals to body Product")
-    
-    item = services.update_qtd_carrinho(user, prod, carrinho.dict())
-    if item:
-        return item
+@app.put("/chart/{key}")
+async def put_qtd_chart(key: str, chart: services.Chart):
+    chart = services.update_chart_quantity(key, chart.dict())
+    if chart:
+        return chart
     
     raise HTTPException(status_code=404, detail="Product not found in the chart")
+
+
+@app.delete("/chart/{key}")
+async def delete_product(key: str):
+    delete = services.delete_chart(key)
+    if delete:
+        return {"detail": "deleted with success"}
+    
+    raise HTTPException(status_code=404, detail="Chart not found")
