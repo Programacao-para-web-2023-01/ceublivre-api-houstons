@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Products(BaseModel):
+class Item(BaseModel):
     product: int
     quantity: int
