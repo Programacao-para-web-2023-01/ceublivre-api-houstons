@@ -1,13 +1,16 @@
 from core.schemas.cart import *
 from core.database.database import db
+import json
 
 def get_cart(key):
     cart = db.get(key)
     return cart
 
+
 def get_user_cart(user):
     items = db.fetch({"user": user}).items
     return items
+
 
 def create_cart(cart):
     if get_user_cart(cart["user"]):
@@ -34,13 +37,21 @@ def delete_cart(key):
     return False
 
 
-# def delete_cart_product(key, product):
-#     cart = get_cart(key)
-#     cart_dict = dict(cart)
-#     if cart_dict:
-#         for i in range(len(cart_dict["items"]["product"])):
-#             if cart_dict["items"]["product"][i] == product:
-#                 del cart_dict["items"]["product"][i]
-#                 return cart_dict
+def delete_cart_product(key, product):
+    cart = get_cart(key)
+    if cart:
+        items = cart["items"]
+        indice = -1
+        for i in range(len(items)):
+            if items[i]["product"] == product:
+                indice = i
+                break
+
+        if indice >= 0:
+            items.pop(indice)
+            cart["items"] = items
+            updated_cart = db.put(cart, key)
+            if updated_cart:
+                return updated_cart        
         
-#     return None
+    return None

@@ -54,10 +54,10 @@ async def delete_cart(key: str):
     raise HTTPException(status_code=404, detail="Cart not found")
 
 
-# @app.delete("/cart/{key}/item/product/{product}")
-# async def delete_cart_product(key: str, product: int):
-#     cart = services.delete_cart_product(key, product)
-#     if cart: 
-#         return cart
+@app.delete("/cart/{key}/item/product/{product}")
+async def delete_cart_product(key: str, product: int):
+    cart = services.delete_cart_product(key, product)
+    if cart: 
+        return cart
     
-#     raise HTTPException(status_code=404, detail="Item not found in the Cart")
+    raise HTTPException(status_code=404, detail="Item not found in the Cart")
