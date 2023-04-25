@@ -29,6 +29,11 @@ async def get_cart(user: int):
 
 @app.post("/cart")
 async def create_cart(cart: services.Cart):
+    exists_cart = services.get_user_cart(cart.user)
+    if exists_cart:
+        cart = services.update_cart(exists_cart["key"], cart.dict())
+        return cart
+
     new_cart = services.create_cart(cart.dict())
     if new_cart:
         return new_cart

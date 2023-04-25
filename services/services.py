@@ -8,8 +8,9 @@ def get_cart(key):
 
 
 def get_user_cart(user):
-    items = db.fetch({"user": user}).items
-    return items
+    cart = db.fetch({"user": user}).items
+    if cart:
+        return cart[0]
 
 
 def create_cart(cart):
