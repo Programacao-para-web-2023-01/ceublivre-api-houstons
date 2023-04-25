@@ -44,6 +44,14 @@ async def put_cart(key: str, cart: services.Cart):
     
     raise HTTPException(status_code=404, detail="Product not found in the cart")
 
+@app.put("/cart/{key}/items/product/{product}/quantity/{quantity}")
+async def add_product(key: str, product: int, quantity: int):
+    cart = services.add_product(key, product, quantity)
+    if cart:
+        return cart
+
+    raise HTTPException(status_code=404, detail="Product does not exist")
+
 
 @app.delete("/cart/{key}")
 async def delete_cart(key: str):

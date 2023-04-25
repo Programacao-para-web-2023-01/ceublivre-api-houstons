@@ -20,12 +20,52 @@ def create_cart(cart):
     return new_cart
 
 
+def add_product(key, product, quantity):
+    cart = get_cart(key)
+    if cart:
+        item = Item(product=product, quantity=quantity)
+        indice = exists_product(cart=cart, product=product)
+        if indice == -1:
+            cart["items"].append(item.dict())
+            updated_cart = db.put(cart, key)
+            if updated_cart:
+                return updated_cart
+        else:
+            updated_cart = update_product_quantity(key, indice, item.dict())
+            if updated_cart:
+                return updated_cart
+
+    return None
+
+
+def update_product_quantity(key, indice, item):
+    cart = get_cart(key)
+    if cart:
+        cart["items"][indice] = item
+        updated_cart = db.put(cart, key)
+        if updated_cart:
+            return updated_cart
+
+    return None
+
+
 def update_cart(key, cart):
     try:
         db.update(cart, key)
         return cart
     except:
         return None
+    
+
+def exists_product(cart, product):
+    items = cart["items"]
+    indice = -1
+    for i in range(len(items)):
+        if items[i]["product"] == product:
+            indice = i
+            break
+
+    return indice
     
 
 def delete_cart(key):
@@ -41,11 +81,7 @@ def delete_cart_product(key, product):
     cart = get_cart(key)
     if cart:
         items = cart["items"]
-        indice = -1
-        for i in range(len(items)):
-            if items[i]["product"] == product:
-                indice = i
-                break
+        indice = exists_product(cart=cart, product=product)
 
         if indice >= 0:
             items.pop(indice)
