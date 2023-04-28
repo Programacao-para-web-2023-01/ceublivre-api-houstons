@@ -4,4 +4,4 @@ from typing import List
 
 class Cart(BaseModel):
     user: int
-    items: List[Item] | None
+    items: List[Item]
