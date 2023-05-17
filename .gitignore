@@ -1,4 +1,4 @@
 .space
-venv
+.venv
 __pycache__
 .env
