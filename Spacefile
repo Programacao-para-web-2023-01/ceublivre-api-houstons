@@ -5,3 +5,11 @@ micros:
     src: .
     engine: python3.9
     primary: true
+    public_routes:
+      - "*"
+    presets: 
+      api_keys: false
+      env:
+        - name: SECRET_MESSAGE
+          description: Secret message only available to this Micro
+          default: "deta is cool"

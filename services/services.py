@@ -1,5 +1,7 @@
 from core.schemas.cart import *
 from core.database.database import db
+from core.database.dbprod import db as prod
+from core.schemas.product import *
 import json
 
 def get_cart(key):
@@ -92,3 +94,12 @@ def delete_cart_product(key, product):
                 return updated_cart        
         
     return None
+
+
+def get_product(id):
+    return prod.get(id)
+
+
+def create_product(produto):
+    new_prod = prod.insert(produto)
+    return new_prod
