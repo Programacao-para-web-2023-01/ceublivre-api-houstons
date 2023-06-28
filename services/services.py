@@ -96,10 +96,14 @@ def delete_cart_product(key, product):
     return None
 
 
-def get_product(id):
+def get_product_id(id):
     return prod.get(id)
 
 
 def create_product(produto):
     new_prod = prod.insert(produto)
     return new_prod
+
+
+def get_product():
+    return prod.fetch().items

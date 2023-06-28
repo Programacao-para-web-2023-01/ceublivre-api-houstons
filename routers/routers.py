@@ -76,9 +76,18 @@ async def delete_cart_product(key: str, product: int):
     raise HTTPException(status_code=404, detail="Item not found in the Cart")
 
 
+@app.get('/product')
+async def get_product():
+    prod = services.get_product()
+    if prod:
+        return prod
+    
+    raise HTTPException(status_code=404, detail="Products not found")
+
+
 @app.get('/product/{id}')
-async def get_product(id:str):
-    prod = services.get_product(id)
+async def get_product_id(id:str):
+    prod = services.get_product_id(id)
     if prod:
         return prod
     
